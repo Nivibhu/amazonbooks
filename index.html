@@ -155,6 +155,33 @@ footer{position:relative;z-index:1;background:rgba(3,3,3,0.96);border-top:1px so
 .fl2 a{font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4ade80;text-decoration:none;transition:color 0.2s}
 .fl2 a:hover{color:var(--gold)}
 .fc{font-size:0.65rem;color:#ffffff;width:100%;text-align:right}
+
+/* Mobile fallback animation */
+.mob-particle{
+  position:absolute;
+  left:var(--x);top:var(--y);
+  width:var(--s);height:var(--s);
+  border-radius:50%;
+  background:var(--c);
+  animation:mob-float var(--d) ease-in-out infinite alternate;
+}
+.mob-ring{
+  position:absolute;
+  left:var(--x);top:var(--y);
+  width:var(--sz);height:var(--sz);
+  border-radius:50%;
+  border:1px solid var(--c);
+  transform:translate(-50%,-50%);
+  animation:mob-pulse var(--d) ease-in-out infinite alternate;
+}
+@keyframes mob-float{
+  0%{transform:translate(0,0) scale(1);opacity:0.4}
+  100%{transform:translate(10px,-20px) scale(1.5);opacity:0.9}
+}
+@keyframes mob-pulse{
+  0%{transform:translate(-50%,-50%) scale(0.8);opacity:0.3}
+  100%{transform:translate(-50%,-50%) scale(1.2);opacity:0.8}
+}
 </style>
 </head>
 <body>
@@ -178,7 +205,13 @@ footer{position:relative;z-index:1;background:rgba(3,3,3,0.96);border-top:1px so
 <div class="hero">
   <div class="hero-inner">
     <div>
-      <p class="eyebrow">Author · Economist · Storyteller</p>
+      <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.6rem">
+        <img src="images/nivedita.jpg" alt="Nivedita Pandey" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #4ade80;box-shadow:0 0 20px rgba(74,222,128,0.25);flex-shrink:0"/>
+        <div>
+          <p class="eyebrow" style="margin-bottom:0.2rem">Author · Economist · Storyteller</p>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);font-family:'Space Grotesk',sans-serif;letter-spacing:0.08em">Banaras Hindu University</p>
+        </div>
+      </div>
       <h1 class="big-name">
         <span class="w1">Nivedita</span>
         <span class="w2">Pandey</span>
@@ -336,7 +369,36 @@ footer{position:relative;z-index:1;background:rgba(3,3,3,0.96);border-top:1px so
   </div>
 </footer>
 
-<script src="books.js"></script>
+<script>
+// ═══════════════════════════════════════════════
+//  BOOKS LIST — NAYI BOOK YAHAN ADD KARO
+//  Ek entry copy karo { se }, tak aur bharo.
+// ═══════════════════════════════════════════════
+const books = [
+
+  {
+    title:    "Dance of Democracy: India",
+    category: "Politics & Democracy",
+    image:    "images/book1.jpg",
+    link:     "https://www.amazon.com/dp/B0FLWV57MM",
+    desc:     "An exhaustive analysis of Indian democracy — its strengths, weaknesses, and untapped opportunities. A journey through historical roots, institutional framework, and the dynamic evolution of the world's largest democratic nation.",
+    quote:    "Understand democracy as a living, evolving entity — and see what the future holds for India as a global leader.",
+    meta:     "107 pages · Kindle & Paperback · December 2024"
+  },
+
+  // NAYI BOOK YAHAN:
+  // {
+  //   title:    "Book Ka Naam",
+  //   category: "Category",
+  //   image:    "images/book2.jpg",
+  //   link:     "https://www.amazon.com/dp/XXXXXXX",
+  //   desc:     "Book ke baare mein 2-3 lines.",
+  //   quote:    "Ek line book se.",
+  //   meta:     "100 pages · Kindle · 2026"
+  // },
+
+];
+</script>
 <script>
 // books loaded from books.js
 const bc=document.getElementById('booksContainer');
@@ -384,6 +446,32 @@ function startCountdown(){
 startCountdown();
 
 // ══ THREE.JS — CINEMATIC 3D BACKGROUND ══
+// Mobile check — Three.js skip on mobile
+const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+if(isMobile){
+  // CSS fallback for mobile
+  document.getElementById('three-canvas').style.display='none';
+  document.body.style.background='#020408';
+  const mobileBg = document.createElement('div');
+  mobileBg.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden';
+  mobileBg.innerHTML = `
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 30% 20%,rgba(200,168,75,0.12),transparent 60%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(74,222,128,0.08),transparent 60%),linear-gradient(160deg,#020408 0%,#040810 50%,#020408 100%)"></div>
+    <div class="mob-particle" style="--x:10%;--y:20%;--s:3px;--c:#c8a84b;--d:3s"></div>
+    <div class="mob-particle" style="--x:80%;--y:10%;--s:2px;--c:#4ade80;--d:4s"></div>
+    <div class="mob-particle" style="--x:50%;--y:60%;--s:4px;--c:#c8a84b;--d:2.5s"></div>
+    <div class="mob-particle" style="--x:20%;--y:80%;--s:2px;--c:#ffffff;--d:5s"></div>
+    <div class="mob-particle" style="--x:90%;--y:40%;--s:3px;--c:#4ade80;--d:3.5s"></div>
+    <div class="mob-particle" style="--x:60%;--y:30%;--s:2px;--c:#c8a84b;--d:4.5s"></div>
+    <div class="mob-particle" style="--x:35%;--y:70%;--s:3px;--c:#ffffff;--d:2s"></div>
+    <div class="mob-particle" style="--x:70%;--y:85%;--s:2px;--c:#4ade80;--d:6s"></div>
+    <div class="mob-ring" style="--sz:200px;--x:20%;--y:30%;--c:rgba(200,168,75,0.06);--d:8s"></div>
+    <div class="mob-ring" style="--sz:300px;--x:70%;--y:60%;--c:rgba(74,222,128,0.04);--d:12s"></div>
+    <div class="mob-ring" style="--sz:150px;--x:50%;--y:80%;--c:rgba(200,168,75,0.05);--d:6s"></div>
+  \`;
+  document.body.prepend(mobileBg);
+} else {
+
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('three-canvas'),
   antialias: true, alpha: true
@@ -593,6 +681,8 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+} // end desktop only
 </script>
 </body>
 </html>
